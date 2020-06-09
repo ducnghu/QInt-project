@@ -39,7 +39,7 @@ public:
 	QInt rol();
 	QInt ror();
 
-	QInt bu2();
+	QInt inverse();
 
 	string toBinString();
 

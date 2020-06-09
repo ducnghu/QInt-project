@@ -52,7 +52,7 @@ void QInt::setbit(int pos, bool num)
 
 }
 
-// set giá trị biến QInt thành str với str là số theo hệ base(2, 10, 16)
+// set giá trị biến QInt thành str với str là số theo cơ base(2, 10, 16)
 void QInt::scanfQInt(string str, int base)
 {
 	int pos = 0;
@@ -74,7 +74,7 @@ void QInt::scanfQInt(string str, int base)
 	}
 }
 
-// In giá trị biến theo hệ số base
+// In giá trị biến theo cơ số base
 void QInt::printfQInt(int base)
 {
 	int pos = QINT_SIZE * 32 - 1;
@@ -140,7 +140,7 @@ QInt QInt::operator+(QInt example)
 	reverse(bin.begin(), bin.end());
 	while (bin[0] == '0' && bin.length() > 1) bin.erase(0, 1);
 
-	// lưu kết quả vào biến trả về (kết quả là dãy bin mang giá trị theo hệ nhị phân)
+	// lưu kết quả vào biến trả về (kết quả là dãy bin mang giá trị theo cơ nhị phân)
 	ret.scanfQInt(bin, 2);
 	return ret;
 }
@@ -149,7 +149,7 @@ QInt QInt::operator+(QInt example)
 QInt QInt::operator-(QInt example)
 {
 	// A - B = A + (-B) = A + (bù 2 của B)
-	return *this + example.bu2();
+	return *this + example.inverse();
 }
 
 // Nhân 2 biến QInt theo thuật toán Booth
@@ -197,8 +197,8 @@ QInt QInt::operator/(QInt example)
 
 
 	// chuyển số chia và số bị chia về số dương
-	if (isQNeg) Q = Q.bu2();
-	if (isMNeg) M = M.bu2();
+	if (isQNeg) Q = Q.inverse();
+	if (isMNeg) M = M.inverse();
 
 	// Thuật toán chia 2 số dương
 	for (int i = 0; i < QINT_SIZE * 32; i++)
@@ -217,10 +217,10 @@ QInt QInt::operator/(QInt example)
 	}
 
 	// số dư cùng dấu số chia
-	if (isMNeg) A = A.bu2();
+	if (isMNeg) A = A.inverse();
 
 	// số bị chia và số chia trái dấu => thương âm
-	if (isQNeg + isMNeg == 1) Q = Q.bu2();
+	if (isQNeg + isMNeg == 1) Q = Q.inverse();
 	return Q;
 }
 
@@ -298,7 +298,7 @@ QInt QInt::operator>>(int num)
 	// nếu là số âm => 11111...1111 = -1
 	// nếu là số dương => 0000...000 = 0
 	if (num >= QINT_SIZE * 32)
-		if (this->isNegative()) return QInt::one().bu2();
+		if (this->isNegative()) return QInt::one().inverse();
 		else  return QInt::zero();
 
 	QInt ret = *this;
@@ -328,7 +328,7 @@ QInt QInt::rol()
 	QInt ret = *this;
 
 	// lưu giá trị bit MSB
-	bool remember = (ret.arr[0] >> 31) & 1;
+	bool holder = (ret.arr[0] >> 31) & 1;
 
 	// left shift
 	for (int i = 0; i < QINT_SIZE - 1; i++)
@@ -339,7 +339,7 @@ QInt QInt::rol()
 	ret.arr[QINT_SIZE - 1] = ret.arr[QINT_SIZE - 1] << 1;
 	
 	// gán MSB cũ vào LSB
-	if (remember) ret.arr[QINT_SIZE - 1] = ret.arr[QINT_SIZE - 1] | 1;
+	if (holder) ret.arr[QINT_SIZE - 1] = ret.arr[QINT_SIZE - 1] | 1;
 
 	return ret;
 }
@@ -350,7 +350,7 @@ QInt QInt::ror()
 	QInt ret = *this;
 
 	// lưu giá trị bit LSB
-	bool remember = ret.arr[QINT_SIZE - 1] & 1;
+	bool holder = ret.arr[QINT_SIZE - 1] & 1;
 
 	//right shift
 	for (int i = QINT_SIZE - 1; i > 0; i--)
@@ -361,13 +361,13 @@ QInt QInt::ror()
 	ret.arr[0] = ret.arr[0] >> 1;
 
 	// gán LSB cũ vào MSB
-	if (remember) ret.arr[0] = ret.arr[0] | (1 << 31);
+	if (holder) ret.arr[0] = ret.arr[0] | (1 << 31);
 
 	return ret;
 }
 
 // trả về -A (dạng bù 2)
-QInt QInt::bu2()
+QInt QInt::inverse()
 {
 	QInt ret = ~(*this);
 	for (int i = QINT_SIZE - 1; i >= 0; i--)
@@ -405,21 +405,21 @@ QInt::~QInt()
 {
 }
 
-// trả về str / 2 (hệ 10)
+// trả về str / 2 (cơ 10)
 string div2(string str)
 {
 	string ret = "";
-	int remember = 0;
+	int holder = 0;
 	for (int i = 0; i < str.length(); i++)
 	{
-		ret += (str[i] - '0') / 2 + remember + '0';
-		remember = ((str[i] - '0') % 2) ? 5 : 0;
+		ret += (str[i] - '0') / 2 + holder + '0';
+		holder = ((str[i] - '0') % 2) ? 5 : 0;
 	}
 	if (ret[0] == '0' && ret.length() > 1) ret.erase(0, 1);
 	return ret;
 }
 
-// trả về str*2 + addition (hệ 10)
+// trả về str*2 + addition (cơ 10)
 string mul2(string str, bool addition)
 {
 	string ret = "";
@@ -441,7 +441,7 @@ string mul2(string str, bool addition)
 	return ret;
 }
 
-// chuyển dãy số string hệ 10 sang QInt
+// chuyển dãy số string cơ 10 sang QInt
 QInt decToBin(string dec)
 {
 	QInt ret;
@@ -455,7 +455,7 @@ QInt decToBin(string dec)
 		dec.erase(0, 1);
 	}
 
-	// chuyển dãy số string dương hệ 10 thành dãy số string hệ 2
+	// chuyển dãy số string dương cơ 10 thành dãy số string cơ 2
 	do
 	{
 		bin += (dec[dec.length() - 1] - '0') % 2 + '0';
@@ -465,18 +465,18 @@ QInt decToBin(string dec)
 
 	// lưu vào biến QInt trả về
 	ret.scanfQInt(bin, 2);
-	if (isNegative) ret = ret.bu2();
+	if (isNegative) ret = ret.inverse();
 
 	return ret;
 }
 
-// chuyển dãy số string hệ 16 sang QInt
+// chuyển dãy số string cơ 16 sang QInt
 QInt hexToBin(string hex)
 {
 	QInt ret;
 	string bin = "";
 
-	//chuyển dãy số string hệ 16 thành dãy số string hệ 2
+	//chuyển dãy số string cơ 16 thành dãy số string cơ 2
 	for (int i = 0; i < hex.length(); i++)
 	{
 		// mỗi kí tự trong dãy số hê 16 tương đương 4 bit mang cùng giá trị trong dãy nhị phân
@@ -490,7 +490,7 @@ QInt hexToBin(string hex)
 	return ret;
 }
 
-// trả về dãy string giá trị QInt theo hệ 10
+// trả về dãy string giá trị QInt theo cơ 10
 string binToDec(QInt example)
 {
 	string ret = "0";
@@ -501,10 +501,10 @@ string binToDec(QInt example)
 	// chuyển example về số dương
 	if (staticNegative)
 	{
-		example = example.bu2();
+		example = example.inverse();
 	}
 
-	//Chuyển QInt thành dãy sô string hệ 10
+	//Chuyển QInt thành dãy sô string cơ 10
 	string bin = example.toBinString();
 	if (bin == "0") return ret;
 	for (int i = 0; i < bin.length(); i++)
@@ -519,7 +519,7 @@ string binToDec(QInt example)
 	return ret;
 }
 
-// trả về dãy string giá trị QInt theo hệ 16
+// trả về dãy string giá trị QInt theo cơ 16
 string binToHex(QInt example)
 {
 	string ret = "";
