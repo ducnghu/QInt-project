@@ -1,0 +1,12 @@
+﻿  QInt.cpp
+C:\Users\ASUS.LAPTOP-G8SISN2R\Desktop\QInt\Project1\QInt.cpp(56,32): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\ASUS.LAPTOP-G8SISN2R\Desktop\QInt\Project1\QInt.cpp(357,31): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Source.cpp
+C:\Users\ASUS.LAPTOP-G8SISN2R\Desktop\QInt\Project1\QInt.cpp(394,49): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\ASUS.LAPTOP-G8SISN2R\Desktop\QInt\Project1\Source.cpp(2,1): warning C4005: '_CRT_SECURE_NO_WARNINGS': macro redefinition
+C:\Users\ASUS.LAPTOP-G8SISN2R\Desktop\QInt\Project1\Source.cpp : message : see previous definition of '_CRT_SECURE_NO_WARNINGS'
+C:\Users\ASUS.LAPTOP-G8SISN2R\Desktop\QInt\Project1\Source.cpp(6,30): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
+C:\Users\ASUS.LAPTOP-G8SISN2R\Desktop\QInt\Project1\Source.cpp(7,40): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\ASUS.LAPTOP-G8SISN2R\Desktop\QInt\Project1\QInt.cpp(312): warning C4715: 'QInt::bu2': not all control paths return a value
+  Project1.vcxproj -> C:\Users\ASUS.LAPTOP-G8SISN2R\Desktop\QInt\x64\Debug\Project1.exe
